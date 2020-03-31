@@ -18,14 +18,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="A wrapper around podman's cli API to mimic basic behavior of docker-compose")
 
-    parser.add_argument("--build", help="build container images", action="store_true")
-    parser.add_argument("--up", nargs="?", const="all", help="create and start pods by using kubectl YMLs")
-    parser.add_argument("--down", nargs="?", const="all", help="tear down existing pods")
-    parser.add_argument("--start", nargs="?", const="all", help="start up existing pods")
-    parser.add_argument("--stop", nargs="?", const="all", help="stop existing pods")
-    parser.add_argument("--restart", nargs="?", const="all", help="restart running pods")
-    parser.add_argument("--ps", help="show status of running pods and containers", action="store_true")
-    parser.add_argument("--generate", nargs="?", const="all", help="generate kube YMLs")
+    parser.add_argument("--build", help="Build container images defined in pods-compose.ini", action="store_true")
+    parser.add_argument("--down", nargs="?", const="all", help="Destroy existing pod(s) and container(s)")
+    parser.add_argument("--generate", nargs="?", const="all", help="Generate Kubernetes Pod YAMLs")
+    parser.add_argument("--ps", help="Show status of pods and containers", action="store_true")
+    parser.add_argument("--restart", nargs="?", const="all", help="Restart running pod(s)")
+    parser.add_argument("--start", nargs="?", const="all", help="Start existing pod(s)")
+    parser.add_argument("--stop", nargs="?", const="all", help="Stop existing pod(s)")
+    parser.add_argument("--up", nargs="?", const="all", help="Create pods and containers from Kubernetes Pod YAMLs")
     #parser.add_argument("--update", nargs="?", const="all", help="update container images")
 
     args = parser.parse_args()
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             kubename = kubedir / podyml
             if kubename.exists():
                 kubename.unlink()
-            rc = runcmd("Generating YML file for pod '" + pod + "'", "/usr/bin/podman generate kube -f " + str(kubename) + " " +str(pod), "yes" )
+            rc = runcmd("Generating YAML file for pod '" + pod + "'", "/usr/bin/podman generate kube -f " + str(kubename) + " " +str(pod), "yes" )
             return rc
 
         # podman generate kube only accepts a single pod or container, so we have to iterate

@@ -3,6 +3,5 @@
 service="pods-compose.service"
 
 cp -v systemd/${service} /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable ${service}
-cp -v pods-compose.* /usr/local/bin/
+cp -v pods-compose.ini /usr/local/bin/
+cp -v pods-compose.py /usr/local/bin/pods-compose
