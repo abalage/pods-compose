@@ -5,8 +5,8 @@ After=var.mount var-cache.mount usr.mount usr-share.mount
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh /usr/local/bin/pods-compose.py --start
-ExecStop=/bin/sh /usr/local/bin/pods-compose.py --stop
+ExecStart=/usr/bin/python3 /usr/local/bin/pods-compose --start
+ExecStop=/usr/bin/python3 /usr/local/bin/pods-compose --stop
 
 [Install]
 WantedBy=multi-user.target
