@@ -40,7 +40,7 @@ Here are the similarities and differences between **docker-compose** and **pods-
 | Stop pod(s) | --stop [POD] | stop [SERVICE] |
 | Restart pod(s) | --restart [POD] | restart [SERVICE] |
 | Build all container images | --build | build |
-| Status of pods and containers | --ps | |
+| Status of pods and containers | --ps | ps |
 | Generate Kubernetes Pod YAML(s) | --generate [POD] | |
 
 ## Install
