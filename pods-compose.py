@@ -16,23 +16,32 @@ config.read(script_location+'/pods-compose.ini')
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="A wrapper around podman's cli API to mimic basic behavior of docker-compose")
+    parser = argparse.ArgumentParser(
+        description="A wrapper around podman's cli API to mimic basic behavior of docker-compose")
 
-    parser.add_argument("--build", help="Build container images defined in pods-compose.ini", action="store_true")
-    parser.add_argument("--down", nargs="?", const="all", help="Destroy existing pod(s) and container(s)")
-    parser.add_argument("--generate", nargs="?", const="all", help="Generate Kubernetes Pod YAMLs")
-    parser.add_argument("--ps", help="Show status of pods and containers", action="store_true")
-    parser.add_argument("--restart", nargs="?", const="all", help="Restart running pod(s)")
-    parser.add_argument("--start", nargs="?", const="all", help="Start existing pod(s)")
-    parser.add_argument("--stop", nargs="?", const="all", help="Stop existing pod(s)")
-    parser.add_argument("--up", nargs="?", const="all", help="Create pods and containers from Kubernetes Pod YAMLs")
+    parser.add_argument(
+        "--build", help="Build container images defined in pods-compose.ini", action="store_true")
+    parser.add_argument("--down", nargs="?", const="all",
+                        help="Destroy existing pod(s) and container(s)")
+    parser.add_argument("--generate", nargs="?", const="all",
+                        help="Generate Kubernetes Pod YAMLs")
+    parser.add_argument(
+        "--ps", help="Show status of pods and containers", action="store_true")
+    parser.add_argument("--restart", nargs="?", const="all",
+                        help="Restart running pod(s)")
+    parser.add_argument("--start", nargs="?", const="all",
+                        help="Start existing pod(s)")
+    parser.add_argument("--stop", nargs="?", const="all",
+                        help="Stop existing pod(s)")
+    parser.add_argument("--up", nargs="?", const="all",
+                        help="Create pods and containers from Kubernetes Pod YAMLs")
     #parser.add_argument("--update", nargs="?", const="all", help="update container images")
 
     args = parser.parse_args()
 
     ####### skip #######
 
-    def get_containerimage_configs ():
+    def get_containerimage_configs():
         import re
         images = []
         p = re.compile('^image_.+$')
@@ -44,17 +53,17 @@ if __name__ == "__main__":
 
         return images
 
-    def runcmd( text, cmd, echo ):
+    def runcmd(text, cmd, echo):
         # https://stackoverflow.com/questions/2715847/read-streaming-input-from-subprocess-communicate
         if echo in ['Y', 'Yes', 'yes']:
             print(text)
-        stdout=[]
+        stdout = []
         with Popen([cmd],
-                shell=True,
-                stdout=PIPE,
-                bufsize=1,
-                universal_newlines=True
-            ) as process:
+                   shell=True,
+                   stdout=PIPE,
+                   bufsize=1,
+                   universal_newlines=True
+                   ) as process:
 
             for line in process.stdout:
                 if echo in ['Y', 'Yes', 'yes']:
@@ -65,11 +74,12 @@ if __name__ == "__main__":
 
         return stdout
 
-    def get_pods_by_name ():
-        pods = runcmd( "Existing pods:", '/usr/bin/podman pod ls --format "{{.Name}}"', "no" )
+    def get_pods_by_name():
+        pods = runcmd("Existing pods:",
+                      '/usr/bin/podman pod ls --format "{{.Name}}"', "no")
         return pods
 
-    def find_yamls_in_dir (directory):
+    def find_yamls_in_dir(directory):
         iterator = os.scandir(path=directory)
         yamls = []
         for DirEntry in iterator:
@@ -83,31 +93,41 @@ if __name__ == "__main__":
 
     if (args.ps):
         runcmd("Status of running pods:", '/usr/bin/podman pod ls', "yes")
-        runcmd("Status of running containers:", "/usr/bin/podman ps -p --format 'table {{.ID}} {{.Names}} {{.PodName}} {{.Status}}'", "yes")
+        runcmd("Status of running containers:",
+               "/usr/bin/podman ps -p --format 'table {{.ID}} {{.Names}} {{.PodName}} {{.Status}}'", "yes")
 
     elif (args.start):
-        pods = ' '.join(get_pods_by_name()) if args.start == "all" else args.start
-        runcmd("Starting pods '" + pods + "'", "/usr/bin/podman pod start " + pods, "yes" )
+        pods = ' '.join(get_pods_by_name()
+                        ) if args.start == "all" else args.start
+        runcmd("Starting pods '" + pods + "'",
+               "/usr/bin/podman pod start " + pods, "yes")
 
     elif (args.stop):
-        pods = ' '.join(get_pods_by_name()) if args.stop == "all" else args.stop
-        runcmd("Stopping pods '" + pods + "'", "/usr/bin/podman pod stop " + pods, "yes" )
+        pods = ' '.join(get_pods_by_name()
+                        ) if args.stop == "all" else args.stop
+        runcmd("Stopping pods '" + pods + "'",
+               "/usr/bin/podman pod stop " + pods, "yes")
 
     elif (args.restart):
-        pods = ' '.join(get_pods_by_name()) if args.restart == "all" else args.restart
-        runcmd("Restarting pods '" + pods + "'", "/usr/bin/podman pod restart " + pods, "yes" )
+        pods = ' '.join(get_pods_by_name()
+                        ) if args.restart == "all" else args.restart
+        runcmd("Restarting pods '" + pods + "'",
+               "/usr/bin/podman pod restart " + pods, "yes")
 
     elif (args.down):
-        pods = ' '.join(get_pods_by_name()) if args.down == "all" else args.down
-        runcmd("Tear down pods '" + pods + "'", "/usr/bin/podman pod rm -f " + pods, "yes" )
+        pods = ' '.join(get_pods_by_name()
+                        ) if args.down == "all" else args.down
+        runcmd("Tear down pods '" + pods + "'",
+               "/usr/bin/podman pod rm -f " + pods, "yes")
 
     elif (args.build):
         images = get_containerimage_configs()
         for image in images:
-            tag , context = image.split(',')
+            tag, context = image.split(',')
             # FIXME input validation on tag is missing
             if os.path.exists(context):
-                runcmd("Building image '" + tag + "' from context " + context, "/usr/bin/podman build -t " + tag + " " + context, "yes" )
+                runcmd("Building image '" + tag + "' from context " + context,
+                       "/usr/bin/podman build -t " + tag + " " + context, "yes")
             else:
                 print("Context does not exist: " + context)
                 sys.exit(1)
@@ -121,10 +141,11 @@ if __name__ == "__main__":
 
         # TODO if replay fails then delete the pod anyway
 
-        def _up_kube ( kube ):
+        def _up_kube(kube):
             kubeyml = kubedir / kube
             if kubeyml.exists():
-                rc = runcmd("Replay Kubernetes YAML for pod '" + kube + "'", "/usr/bin/podman play kube " + str(kubeyml), "yes" )
+                rc = runcmd("Replay Kubernetes YAML for pod '" + kube +
+                            "'", "/usr/bin/podman play kube " + str(kubeyml), "yes")
             return rc
 
         # podman play kube only accepts a single yaml file, so we have to iterate
@@ -142,14 +163,15 @@ if __name__ == "__main__":
         # Check post for limitations: https://developers.redhat.com/blog/2019/01/29/podman-kubernetes-yaml/
 
         if not kubedir.is_dir():
-            kubedir.mkdir(mode=0o755,parents=True)
+            kubedir.mkdir(mode=0o755, parents=True)
 
-        def _generate_kube ( pod ):
+        def _generate_kube(pod):
             podyml = pod + ".yml"
             kubename = kubedir / podyml
             if kubename.exists():
                 kubename.unlink()
-            rc = runcmd("Generating YAML file for pod '" + pod + "'", "/usr/bin/podman generate kube -f " + str(kubename) + " " +str(pod), "yes" )
+            rc = runcmd("Generating YAML file for pod '" + pod + "'",
+                        "/usr/bin/podman generate kube -f " + str(kubename) + " " + str(pod), "yes")
             return rc
 
         # podman generate kube only accepts a single pod or container, so we have to iterate
