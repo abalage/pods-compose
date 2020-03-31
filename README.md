@@ -79,7 +79,7 @@ You can do it like this:
 ```
 # systemctl edit pods-compose.service
 
->[Unit]
+[Unit]
 After= srv.mount
 ```
 
