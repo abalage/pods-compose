@@ -1,6 +1,6 @@
 # pods-compose
 
-A wrapper around [podman](https://github.com/containers/libpod) CLI to provide similar experince for PODs as docker-compose gives to services.
+A wrapper around [Podman](https://github.com/containers/libpod) CLI to provide similar experince for PODs as docker-compose gives to services.
 
 It has a [configuration file](#configuration-of-pods-compose) to store image build descriptions and other settings.
 
@@ -9,7 +9,7 @@ It has a [configuration file](#configuration-of-pods-compose) to store image bui
 Usage: **pods-compose** [*options*] [pod]
 
 # Options:
-A wrapper around podman's cli API to mimic basic behavior of docker-compose
+A wrapper around Podman's cli API to mimic basic behavior of docker-compose
 ```
 optional arguments:
   -h, --help            show this help message and exit
@@ -63,7 +63,7 @@ In [pods-compose.ini](pods-compose.ini) you can add image build descriptions acc
 You just need to make sure that all has the prefix of **"image_"**. The value will be separated by a single comma to TAG and CONTEXT. CONTEXT is expected to be a directory and must contain either a Dockerfile or a Containerfile.
 
 #### Autostart of pods and containers upon system reboot
-As podman is daemonless, there is no system daemon which should start pods and containers upon reboot.
+As Podman is daemonless, there is no system daemon which should start pods and containers upon reboot.
 To achieve that one can create a systemd service unit to start the deployment automatically. An example of [pods-compose.service](systemd/pods-compose.service) is included in the repo.
 
 The provided [install.sh](install.sh) script will install it for you. In order to systemd recognize it, you have to run these commands.
@@ -89,7 +89,7 @@ After= srv.mount
 
 **pods-compose** also relies on YAML files for describing pods and containers, however you do not have to create them manually.
 
-1. You need to [create pods and containers](#1-describe-pods-and-containers) using the command line interface of podman. The CLI is well documented and mostly behaves the same way as [docker CLI](https://podman.io/whatis.html) does.
+1. You need to [create pods and containers](#1-describe-pods-and-containers) using the command line interface of Podman. The CLI is well documented and mostly behaves the same way as [docker CLI](https://podman.io/whatis.html) does.
 2. Then use pod-compose to generate [Kubernetes Pod YAML](https://github.com/containers/libpod/blob/master/docs/source/markdown/podman-generate-kube.1.md) files for each pod.
 3. The YAMLs will be used to deploy your pods and containers with '**--up**'.
 
@@ -136,7 +136,7 @@ podman run -d --name proxy --hostname proxy --expose 80 --expose 443 --pod ${pod
     nginx:1.16
 ```
 
-You can read more about **publish IPs** is the following blog: [Convert docker-compose services to pods with podman](https://balagetech.com/convert-docker-compose-services-to-pods/)
+You can read more about **publish IPs** is the following blog: [Convert docker-compose services to pods with Podman](https://balagetech.com/convert-docker-compose-services-to-pods/)
 ### 2. Generate Kubernetes Pod YAML definitions
 
 Once you have your pods defined, let's create a snapshot of their description in YAMLs.
