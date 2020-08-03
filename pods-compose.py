@@ -143,9 +143,13 @@ if __name__ == "__main__":
 
         def _up_kube(kube):
             kubeyml = kubedir / kube
+            networks = config['DEFAULT']['networks']
+            netcmd = str()
+            if networks:
+                netcmd = " --network " + networks
             if kubeyml.exists():
                 rc = runcmd("Replay Kubernetes YAML for pod '" + kube +
-                            "'", "/usr/bin/podman play kube " + str(kubeyml), "yes")
+                            "'", "/usr/bin/podman play kube " + str(kubeyml) + netcmd, "yes")
             return rc
 
         # podman play kube only accepts a single yaml file, so we have to iterate
