@@ -129,7 +129,7 @@ if __name__ == "__main__":
                 runcmd("Building image '" + tag + "' from context " + context,
                        "/usr/bin/podman build -t " + tag + " " + context, "yes")
             else:
-                print("Context does not exist: " + context)
+                print("Context does not exist: {}".format(context))
                 sys.exit(1)
 
     elif (args.up):
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         kubedir = Path(config['DEFAULT']['kubedir'])
         kubes = find_yamls_in_dir(kubedir)
         if not kubes:
-            print("No Kubernetes YAMLs found in directory: "+str(kubedir))
+            print("No Kubernetes YAMLs found in directory: {}".format(kubedir))
 
         # TODO if replay fails then delete the pod anyway
 
