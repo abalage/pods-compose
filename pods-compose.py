@@ -10,7 +10,6 @@ import argparse
 import os
 import os.path
 import configparser
-from pathlib import Path
 
 INIFILE = 'pods-compose.ini'
 DOTFILE = '.'+ INIFILE
