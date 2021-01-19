@@ -8,11 +8,23 @@ from subprocess import Popen, PIPE
 import sys
 import argparse
 import os
+import os.path
 import configparser
 
+INIFILE = 'pods-compose.ini'
+DOTFILE = '.'+ INIFILE
+HOME = os.path.expandvars("$HOME")
+ETC = "/etc/pods-compose"
+SCRIPT_LOC = os.path.dirname(os.path.abspath(__file__))
+for location in HOME, ETC, SCRIPT_LOC:
+    CONFIGFILE = os.path.join(location, INIFILE)
+    if os.path.exists(CONFIGFILE): break
+    if location == HOME:
+        CONFIGFILE = os.path.join(location, DOTFILE)
+        if os.path.exists(CONFIGFILE): break
+
 config = configparser.ConfigParser()
-script_location = os.path.dirname(os.path.abspath(__file__))
-config.read(script_location+'/pods-compose.ini')
+config.read(CONFIGFILE)
 
 if __name__ == "__main__":
 
