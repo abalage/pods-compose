@@ -1,5 +1,7 @@
 # pods-compose
 
+**[Update 02-22-2022] This project is not maintained anymore. If you are looking for an alternative, have a look at [podman-compose](https://github.com/containers/podman-compose) or use [Ansible with ansible-podman-collections](https://github.com/containers/ansible-podman-collections).**
+
 A wrapper around [Podman](https://github.com/containers/libpod) CLI to provide similar experince for PODs as docker-compose gives to services.
 
 It has a [configuration file](#configuration-of-pods-compose) to store image build descriptions and other settings.
